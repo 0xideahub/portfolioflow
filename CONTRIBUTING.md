@@ -1,6 +1,6 @@
-# Contributing to Maybe
+# Contributing to PortfolioFlow
 
-It means so much that you're interested in contributing to Maybe! Seriously. Thank you. The entire community benefits from these contributions!
+It means so much that you're interested in contributing to PortfolioFlow! Seriously. Thank you. The entire community benefits from these contributions!
 
 ## House Rules
 

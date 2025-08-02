@@ -1,5 +1,5 @@
 {
-  "name": "Maybe",
+  	"name": "PortfolioFlow",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
