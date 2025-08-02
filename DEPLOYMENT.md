@@ -54,10 +54,19 @@ RAILS_ENV=production bundle exec rails db:migrate
 ```
 
 ## Troubleshooting
-- Check Railway logs for errors
-- Ensure all environment variables are set
-- Verify database connection
-- Check asset compilation
+
+### Common Issues:
+- **Branch Protection**: If PR merge is blocked, temporarily disable branch protection in Settings → Branches
+- **Database Connection**: Ensure DATABASE_URL is set in Railway environment variables
+- **Asset Compilation**: Check that RAILS_MASTER_KEY is set correctly
+- **Procfile Issues**: Ensure Procfile exists and uses correct Rails server command
+
+### Deployment Fixes Applied:
+- ✅ Added `Procfile` with `web: bundle exec rails server -p $PORT -b 0.0.0.0`
+- ✅ Fixed database.yml to handle Railway's DATABASE_URL
+- ✅ Resolved linting issues (30+ RuboCop violations)
+- ✅ Fixed test failures (branding, icon sizes)
+- ✅ Updated all Maybe references to PortfolioFlow
 
 ## Cost
 - **Free tier**: $5 credit/month (enough for MVP)
