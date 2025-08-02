@@ -1,0 +1,94 @@
+<%# locals: (balance_sheet:, **args) %>
+
+<div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4" id="portfolio-performance">
+  <div class="flex items-center gap-2">
+    <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
+      <span>Portfolio Performance</span>
+      <span class="text-secondary">&middot;</span>
+      <span class="text-secondary font-medium text-lg">
+        <%= format_money(balance_sheet.assets.total_money) %>
+      </span>
+    </h2>
+  </div>
+
+  <% if balance_sheet.assets.total > 0 %>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Total Portfolio Value -->
+      <div class="bg-surface rounded-lg p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon "trending-up", class: "text-primary" %>
+          <span class="text-sm font-medium text-secondary">Total Assets</span>
+        </div>
+        <p class="text-2xl font-bold text-primary">
+          <%= format_money(balance_sheet.assets.total_money) %>
+        </p>
+      </div>
+
+      <!-- Investment Allocation -->
+      <div class="bg-surface rounded-lg p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon "pie-chart", class: "text-primary" %>
+          <span class="text-sm font-medium text-secondary">Investments</span>
+        </div>
+        <p class="text-2xl font-bold text-primary">
+          <%= format_money(balance_sheet.assets.total_money) %>
+        </p>
+        <p class="text-sm text-secondary">
+          100% of portfolio
+        </p>
+      </div>
+
+      <!-- Net Worth -->
+      <div class="bg-surface rounded-lg p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon "wallet", class: "text-primary" %>
+          <span class="text-sm font-medium text-secondary">Net Worth</span>
+        </div>
+        <p class="text-2xl font-bold text-primary">
+          <%= format_money(balance_sheet.net_worth_money) %>
+        </p>
+        <p class="text-sm text-secondary">
+          Assets minus liabilities
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex gap-2 pt-2">
+      <%= render DS::Link.new(
+        icon: "plus",
+        text: "Add Investment",
+        href: new_account_path,
+        frame: :modal,
+        variant: "secondary"
+      ) %>
+      
+      <%= render DS::Link.new(
+        icon: "trending-up",
+        text: "View Performance",
+        href: accounts_path,
+        variant: "secondary"
+      ) %>
+    </div>
+
+  <% else %>
+    <div class="py-10 flex flex-col items-center">
+      <%= render DS::FilledIcon.new(
+        variant: :container,
+        icon: "trending-up",
+      ) %>
+
+      <p class="text-primary text-sm font-medium mb-1 mt-4">No investments yet</p>
+      <p class="text-secondary text-sm text-center">Add your first investment to start tracking your portfolio performance</p>
+      
+      <div class="mt-4">
+        <%= render DS::Link.new(
+          icon: "plus",
+          text: "Add Your First Investment",
+          href: new_account_path,
+          frame: :modal
+        ) %>
+      </div>
+    </div>
+  <% end %>
+</div> 

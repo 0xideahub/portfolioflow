@@ -3,6 +3,9 @@ class Assistant
 
   attr_reader :chat, :instructions
 
+  MAX_RETRIES = 3
+  INITIAL_RETRY_DELAY = 1.second
+
   class << self
     def for_chat(chat)
       config = config_for(chat)
@@ -59,7 +62,12 @@ class Assistant
     responder.respond(previous_response_id: latest_response_id)
   rescue => e
     stop_thinking
-    chat.add_error(e)
+    
+    if should_retry?(e) && retry_count < MAX_RETRIES
+      retry_with_backoff(e)
+    else
+      chat.add_error(e)
+    end
   end
 
   private
@@ -71,5 +79,31 @@ class Assistant
       end
 
       @function_tool_caller ||= FunctionToolCaller.new(function_instances)
+    end
+
+    def should_retry?(error)
+      case error
+      when Provider::Openai::Error
+        error.message.match?(/rate limit|timeout|server error|temporary/i)
+      when Provider::Error
+        error.message.match?(/timeout|server error|temporary/i)
+      else
+        false
+      end
+    end
+
+    def retry_count
+      @retry_count ||= 0
+    end
+
+    def retry_with_backoff(error)
+      @retry_count ||= 0
+      @retry_count += 1
+      
+      delay = INITIAL_RETRY_DELAY * (2 ** (retry_count - 1))
+      
+      Rails.logger.info "Retrying AI request (attempt #{retry_count}/#{MAX_RETRIES}) after #{delay} seconds"
+      
+      AssistantResponseJob.set(wait: delay).perform_later(chat.messages.last)
     end
 end

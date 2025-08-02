@@ -3,11 +3,9 @@ en:
   import:
     cleans:
       show:
-        description: Edit your data in the table below.  Red cells are invalid.
-        errors_notice: You have errors in your data.  Hover over the error to see
-          details.
-        errors_notice_mobile: You have errors in your data.  Tap over the error tooltip to see
-          details.
+        description: Edit your data in the table below. Red cells are invalid.
+        errors_notice: You have errors in your data. Hover over the error to see details.
+        errors_notice_mobile: You have errors in your data. Tap over the error tooltip to see details.
         title: Clean your data
     configurations:
       mint_import:
@@ -24,37 +22,27 @@ en:
         create_account: Create account
         csv_mapping_label: "%{mapping} in CSV"
         maybe_mapping_label: "%{mapping} in Maybe"
-        no_accounts: You don't have any accounts yet. Please create an account that
-          we can use for (unassigned) rows in your CSV or go back to the Clean step
-          and provide an account name we can use.
+        no_accounts: You don't have any accounts yet. Please create an account that we can use for (unassigned) rows in your CSV or go back to the Clean step and provide an account name we can use.
         rows_label: Rows
         unassigned_account: Need to create a new account for unassigned rows?
       show:
-        account_mapping_description: Assign all of your imported file's accounts to
-          Maybe's existing accounts.  You can also add new accounts or leave them
-          uncategorized.
+        account_mapping_description: Assign all of your imported file's accounts to Maybe's existing accounts. You can also add new accounts or leave them uncategorized.
         account_mapping_title: Assign your accounts
-        account_type_mapping_description: Assign all of your imported file's account
-          types to Maybe's
+        account_type_mapping_description: Assign all of your imported file's account types to Maybe's
         account_type_mapping_title: Assign your account types
-        category_mapping_description: Assign all of your imported file's categories
-          to Maybe's existing categories.  You can also add new categories or leave
-          them uncategorized.
+        category_mapping_description: Assign all of your imported file's categories to Maybe's existing categories. You can also add new categories or leave them uncategorized.
         category_mapping_title: Assign your categories
-        tag_mapping_description: Assign all of your imported file's tags to Maybe's
-          existing tags.  You can also add new tags or leave them uncategorized.
+        tag_mapping_description: Assign all of your imported file's tags to Maybe's existing tags. You can also add new tags or leave them uncategorized.
         tag_mapping_title: Assign your tags
     uploads:
       show:
-        description: Paste or upload your CSV file below.  Please review the instructions
-          in the table below before beginning.
+        description: Upload your investment data CSV file below. We'll help you map your data to PortfolioFlow's investment tracking system.
         instructions_1: Below is an example CSV with columns available for import.
         instructions_2: Your CSV must have a header row
-        instructions_3: You may name your columns anything you like.  You will map
-          them at a later step.
+        instructions_3: You may name your columns anything you like. We'll map them in the next step.
         instructions_4: Columns marked with an asterisk (*) are required data.
-        instructions_5: No commas, no currency symbols, and no parentheses in numbers.
-        title: Import your data
+        instructions_5: "For amounts: No commas, no currency symbols, and no parentheses in numbers."
+        title: Import Investment Data
   imports:
     empty:
       message: No imports yet.
@@ -74,16 +62,15 @@ en:
       new: New import
       title: Imports
     new:
-      description: You can manually import various types of data via CSV or use one
-        of our import templates like Mint.
-      import_accounts: Import accounts
+      description: Import your investment portfolio data, transactions, and account information via CSV or use our specialized templates.
+      import_accounts: Import investment accounts
       import_mint: Import from Mint
-      import_portfolio: Import investments
-      import_transactions: Import transactions
+      import_portfolio: Import investment trades
+      import_portfolio_allocation: Import portfolio allocation
+      import_transactions: Import investment transactions
       resume: Resume %{type}
-      sources: Sources
-      title: New CSV Import
+      sources: Import Sources
+      title: Import Investment Data
     ready:
-      description: Here's a summary of the new items that will be added to your account
-        once you publish this import.
+      description: Here's a summary of the new items that will be added to your account once you publish this import.
       title: Confirm your import data

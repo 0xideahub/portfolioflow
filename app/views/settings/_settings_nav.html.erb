@@ -5,12 +5,13 @@ nav_sections = [
     items: [
       { label: t(".profile_label"), path: settings_profile_path, icon: "circle-user" },
       { label: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" },
+      { label: "AI Settings", path: settings_ai_path, icon: "zap" },
       { label: t(".security_label"), path: settings_security_path, icon: "shield-check" },
       { label: "API Key", path: settings_api_key_path, icon: "key" },
       { label: t(".self_hosting_label"), path: settings_hosting_path, icon: "database", if: self_hosted? },
       { label: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign", if: !self_hosted? },
       { label: t(".accounts_label"), path: accounts_path, icon: "layers" },
-      { label: t(".imports_label"), path: imports_path, icon: "download" }
+      { label: t(".imports_label"), path: imports_path, icon: "upload" }
     ]
   },
   {

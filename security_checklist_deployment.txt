@@ -1,0 +1,145 @@
+SECURITY CHECKLIST FOR AI FUNCTIONALITY DEPLOYMENT
+==================================================
+
+CRITICAL SECURITY AREAS TO VERIFY
+=================================
+
+✅ **API Key Security**
+- [x] OpenAI API keys stored in environment variables
+- [x] No hardcoded secrets in codebase
+- [x] Test data properly filtered in VCR cassettes
+- [x] Self-hosted users get proper guidance on key security
+
+✅ **Input Validation & Sanitization**
+- [x] Chat form input has maxlength limit (4000 chars)
+- [x] Markdown rendering uses sanitize() helper
+- [x] Allowed HTML tags: p, br, strong, em, b, i, u, h1-h6, ul, ol, li, blockquote, code, pre, a
+- [x] Allowed attributes: href, target, rel
+
+✅ **Error Handling Security**
+- [x] Error messages don't expose internal details
+- [x] No sensitive data in error logs
+- [x] Generic fallback messages for unknown errors
+
+✅ **Data Privacy**
+- [x] AI consent flow implemented
+- [x] Data anonymization mentioned in UI
+- [x] User can disable AI features anytime
+
+⚠️ **AREAS NEEDING ATTENTION**
+
+**1. AI Response Validation**
+- Need to validate AI responses before displaying
+- Consider rate limiting for AI requests
+- Monitor for prompt injection attacks
+
+**2. User Input Sanitization**
+- Consider additional sanitization for user messages
+- Validate message length and content
+- Check for malicious patterns
+
+**3. API Key Management**
+- Self-hosted users need better guidance on key security
+- Consider key rotation recommendations
+- Monitor for key exposure in logs
+
+**4. Rate Limiting**
+- Implement rate limiting for AI chat requests
+- Prevent abuse of AI features
+- Monitor for unusual usage patterns
+
+PRE-DEPLOYMENT SECURITY TESTS
+=============================
+
+**1. Run Security Audit**
+```bash
+bundle exec brakeman
+```
+
+**2. Test XSS Vulnerabilities**
+- Try injecting script tags in chat messages
+- Test markdown rendering with malicious content
+- Verify sanitization is working
+
+**3. Test API Key Security**
+- Verify no keys are logged
+- Check error messages don't expose keys
+- Test key validation
+
+**4. Test Error Handling**
+- Trigger various AI errors
+- Verify error messages are safe
+- Check error logging
+
+**5. Test Input Validation**
+- Submit very long messages
+- Try special characters and HTML
+- Test markdown injection
+
+POST-DEPLOYMENT MONITORING
+==========================
+
+**1. Error Monitoring**
+- Set up Sentry or similar for error tracking
+- Monitor AI-specific errors
+- Track rate limiting events
+
+**2. Usage Monitoring**
+- Monitor AI usage patterns
+- Track error rates
+- Watch for unusual activity
+
+**3. Security Monitoring**
+- Monitor for potential XSS attempts
+- Track API key usage
+- Watch for abuse patterns
+
+**4. User Feedback**
+- Monitor user reports of issues
+- Track AI feature adoption
+- Watch for security concerns
+
+DEPLOYMENT RECOMMENDATIONS
+==========================
+
+**1. Staged Rollout**
+- Deploy to staging first
+- Test with limited users
+- Monitor for issues
+
+**2. Monitoring Setup**
+- Set up error tracking before deployment
+- Configure usage monitoring
+- Set up alerts for security issues
+
+**3. Rollback Plan**
+- Have plan to disable AI features if needed
+- Keep previous version ready
+- Document rollback procedures
+
+**4. User Communication**
+- Inform users about AI features
+- Provide security guidance
+- Set expectations for monitoring
+
+SECURITY IMPROVEMENTS MADE
+==========================
+
+✅ **Added Input Sanitization**
+- Chat form has maxlength limit
+- Markdown rendering uses sanitize()
+- Restricted HTML tags and attributes
+
+✅ **Improved Error Handling**
+- Generic error messages
+- No sensitive data exposure
+- Proper error logging
+
+✅ **Enhanced Privacy**
+- Clear consent flow
+- Easy disable options
+- Data anonymization
+
+CONCLUSION
+==========
+The AI functionality has basic security measures in place, but additional monitoring and validation should be implemented post-deployment. The current implementation is safe for initial deployment with proper monitoring. 

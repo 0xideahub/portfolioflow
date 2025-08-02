@@ -57,9 +57,11 @@ class TransactionImport < Import
   def csv_template
     template = <<-CSV
       date*,amount*,name,currency,category,tags,account,notes
-      05/15/2024,-45.99,Grocery Store,USD,Food,groceries|essentials,Checking Account,Monthly grocery run
-      05/16/2024,1500.00,Salary,,Income,,Main Account,
-      05/17/2024,-12.50,Coffee Shop,,,coffee,,
+      01/15/2024,-1000.00,401k Contribution,USD,Investment,retirement|401k,401k Account,Monthly 401k contribution
+      01/16/2024,2500.00,Dividend Payment,USD,Investment,dividend|income,Brokerage Account,Quarterly dividend from AAPL
+      01/17/2024,-500.00,IRA Contribution,USD,Investment,retirement|ira,IRA Account,Monthly IRA contribution
+      01/18/2024,-200.00,Investment Purchase,USD,Investment,purchase,Brokerage Account,Additional shares purchase
+      01/19/2024,150.00,Interest Payment,USD,Investment,interest|income,Savings Account,Monthly interest payment
     CSV
 
     csv = CSV.parse(template, headers: true)

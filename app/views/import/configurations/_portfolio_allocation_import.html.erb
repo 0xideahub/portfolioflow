@@ -1,0 +1,27 @@
+<%= styled_form_with model: @import, scope: :import, url: import_configuration_path(@import), class: "space-y-4" do |form| %>
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= form.select :date_col_label, @import.csv_headers, { label: "Date", required: true } %>
+      <%= form.select :portfolio_value_col_label, @import.csv_headers, { label: "Portfolio Value", required: true } %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= form.select :currency_col_label, @import.csv_headers, { label: "Currency" } %>
+      <%= form.select :account_col_label, @import.csv_headers, { label: "Account" } %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= form.select :ticker_col_label, @import.csv_headers, { label: "Ticker Symbol" } %>
+      <%= form.select :exchange_operating_mic_col_label, @import.csv_headers, { label: "Exchange" } %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= form.select :qty_col_label, @import.csv_headers, { label: "Quantity" } %>
+      <%= form.select :price_col_label, @import.csv_headers, { label: "Price" } %>
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <%= form.submit "Continue", class: "btn btn-primary" %>
+  </div>
+<% end %> 

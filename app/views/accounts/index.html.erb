@@ -1,5 +1,5 @@
 <header class="flex justify-between items-center text-primary font-medium">
-  <h1 class="text-xl"><%= t(".accounts") %></h1>
+  <h1 class="text-xl">Investment Portfolio</h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= icon(
@@ -11,7 +11,7 @@
             frame: :_top
           ) %>
       <%= render DS::Link.new(
-        text: "New account",
+        text: "Add Investment",
         href: new_account_path(return_to: accounts_path),
         variant: "primary",
         icon: "plus",
@@ -24,13 +24,44 @@
 <% if @manual_accounts.empty? && @plaid_items.empty? %>
   <%= render "empty" %>
 <% else %>
-  <div class="space-y-2">
+  <div class="space-y-6">
+    <!-- Portfolio Summary -->
+    <div class="bg-container shadow-border-xs rounded-xl p-4">
+      <h2 class="text-lg font-medium mb-4">Portfolio Summary</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-primary">
+            <%= @manual_accounts.count %>
+          </p>
+          <p class="text-sm text-secondary">Total Accounts</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-primary">
+            <%= @manual_accounts.select { |a| a.accountable_type.in?(['Investment', 'Crypto']) }.count %>
+          </p>
+          <p class="text-sm text-secondary">Investment Accounts</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-primary">
+            <%= @manual_accounts.select { |a| a.accountable_type == 'Depository' }.count %>
+          </p>
+          <p class="text-sm text-secondary">Cash Accounts</p>
+        </div>
+      </div>
+    </div>
+
     <% if @plaid_items.any? %>
-      <%= render @plaid_items.sort_by(&:created_at) %>
+      <div class="space-y-2">
+        <h2 class="text-lg font-medium">Connected Accounts</h2>
+        <%= render @plaid_items.sort_by(&:created_at) %>
+      </div>
     <% end %>
 
     <% if @manual_accounts.any? %>
-      <%= render "accounts/index/manual_accounts", accounts: @manual_accounts %>
+      <div class="space-y-2">
+        <h2 class="text-lg font-medium">Your Investment Accounts</h2>
+        <%= render "accounts/index/manual_accounts", accounts: @manual_accounts %>
+      </div>
     <% end %>
   </div>
 <% end %>

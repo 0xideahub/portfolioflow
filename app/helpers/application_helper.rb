@@ -83,7 +83,7 @@ module ApplicationHelper
     cookies[:admin] == "true"
   end
 
-  # Renders Markdown text using Redcarpet
+  # Renders Markdown text using Redcarpet with sanitization
   def markdown(text)
     return "" if text.blank?
 
@@ -105,7 +105,86 @@ module ApplicationHelper
       footnotes: true
     )
 
-    markdown.render(text).html_safe
+    # Sanitize the rendered HTML to prevent XSS
+    sanitize(markdown.render(text), tags: %w[p br strong em b i u h1 h2 h3 h4 h5 h6 ul ol li blockquote code pre a], attributes: %w[href target rel])
+  end
+
+  def ai_status_for_user(user)
+    return :unavailable unless user.ai_available?
+    return :disabled unless user.ai_enabled?
+    :available
+  end
+
+  def ai_status_message(user)
+    case ai_status_for_user(user)
+    when :available
+      "AI Assistant is ready to help"
+    when :disabled
+      "AI Assistant is disabled. Enable it in settings to get started."
+    when :unavailable
+      if Rails.application.config.app_mode.self_hosted?
+        "AI Assistant requires OpenAI API key configuration"
+      else
+        "AI Assistant is temporarily unavailable"
+      end
+    end
+  end
+
+  def ai_status_icon(user)
+    case ai_status_for_user(user)
+    when :available
+      "check-circle"
+    when :disabled
+      "x-circle"
+    when :unavailable
+      "alert-circle"
+    end
+  end
+
+  def ai_status_color(user)
+    case ai_status_for_user(user)
+    when :available
+      "text-green-600"
+    when :disabled
+      "text-yellow-600"
+    when :unavailable
+      "text-red-600"
+    end
+  end
+
+  def ai_availability_notification
+    return nil unless Current.user.present?
+    
+    case ai_status_for_user(Current.user)
+    when :available
+      nil # No notification needed when available
+    when :disabled
+      {
+        type: "info",
+        title: "AI Assistant Available",
+        message: "AI features are ready to use. Enable them in settings to get started.",
+        action: "Enable AI",
+        action_path: settings_ai_path
+      }
+    when :unavailable
+      if Rails.application.config.app_mode.self_hosted?
+        {
+          type: "warning",
+          title: "AI Setup Required",
+          message: "Configure your OpenAI API key to enable AI features.",
+          action: "Setup AI",
+          action_path: settings_ai_path
+        }
+      else
+        {
+          type: "warning",
+          title: "AI Temporarily Unavailable",
+          message: "AI features are currently unavailable. Please try again later.",
+          action: "Check Status",
+          action_path: settings_ai_path
+        }
+      end
+    end
   end
 
   private

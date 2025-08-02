@@ -1,0 +1,121 @@
+<div class="min-h-screen bg-surface">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-container shadow-border-xs rounded-xl p-8">
+      <div class="flex items-center gap-2 mb-8">
+        <%= icon "trending-up", class: "text-primary" %>
+        <h1 class="text-3xl font-bold text-primary">Privacy Policy</h1>
+      </div>
+      
+      <div class="prose prose-lg max-w-none">
+        <p class="text-secondary mb-6">Last updated: <%= Date.current.strftime("%B %d, %Y") %></p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">1. Introduction</h2>
+        <p class="mb-4">
+          PortfolioFlow ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our investment portfolio tracking platform.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">2. Information We Collect</h2>
+        
+        <h3 class="text-xl font-medium text-primary mt-6 mb-3">2.1 Personal Information</h3>
+        <p class="mb-4">We may collect the following personal information:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Name, email address, and contact information</li>
+          <li>Account credentials for connected financial institutions</li>
+          <li>Investment portfolio data and transaction history</li>
+          <li>Financial goals and preferences</li>
+          <li>Usage data and analytics</li>
+        </ul>
+        
+        <h3 class="text-xl font-medium text-primary mt-6 mb-3">2.2 Financial Data</h3>
+        <p class="mb-4">
+          When you connect your financial accounts, we may collect:
+        </p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Account balances and transaction history</li>
+          <li>Investment holdings and performance data</li>
+          <li>Portfolio allocation and asset information</li>
+          <li>Market data and exchange rates</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">3. How We Use Your Information</h2>
+        <p class="mb-4">We use your information to:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Provide and maintain our investment tracking services</li>
+          <li>Calculate portfolio performance and analytics</li>
+          <li>Generate investment insights and recommendations</li>
+          <li>Improve our platform and user experience</li>
+          <li>Send important updates and notifications</li>
+          <li>Comply with legal obligations</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">4. Data Security</h2>
+        <p class="mb-4">
+          We implement industry-standard security measures to protect your information:
+        </p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Encryption of data in transit and at rest</li>
+          <li>Secure authentication and access controls</li>
+          <li>Regular security audits and monitoring</li>
+          <li>Compliance with financial data protection standards</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">5. Data Sharing</h2>
+        <p class="mb-4">We do not sell your personal information. We may share data with:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Financial institutions you authorize us to connect with</li>
+          <li>Service providers who assist in platform operations</li>
+          <li>Legal authorities when required by law</li>
+          <li>Third parties with your explicit consent</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">6. Your Rights</h2>
+        <p class="mb-4">You have the right to:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Access and review your personal information</li>
+          <li>Correct inaccurate data</li>
+          <li>Delete your account and associated data</li>
+          <li>Opt-out of marketing communications</li>
+          <li>Export your data in a portable format</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">7. Data Retention</h2>
+        <p class="mb-4">
+          We retain your information for as long as your account is active or as needed to provide services. You may request deletion of your data at any time.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">8. Cookies and Tracking</h2>
+        <p class="mb-4">
+          We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized features. You can control cookie settings through your browser.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">9. Children's Privacy</h2>
+        <p class="mb-4">
+          Our services are not intended for children under 13. We do not knowingly collect personal information from children under 13.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">10. International Transfers</h2>
+        <p class="mb-4">
+          Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place for such transfers.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">11. Changes to This Policy</h2>
+        <p class="mb-4">
+          We may update this Privacy Policy from time to time. We will notify you of any material changes via email or through our platform.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-primary mt-8 mb-4">12. Contact Us</h2>
+        <p class="mb-4">
+          If you have questions about this Privacy Policy or our data practices, please contact us at:
+        </p>
+        <div class="bg-surface rounded-lg p-4 mb-6">
+          <p class="font-medium text-primary">PortfolioFlow</p>
+          <p class="text-secondary">Email: privacy@portfolioflow.com</p>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-6 border-t border-secondary">
+        <%= link_to "Back to PortfolioFlow", root_path, class: "text-primary hover:text-primary-dark font-medium" %>
+      </div>
+    </div>
+  </div>
+</div> 

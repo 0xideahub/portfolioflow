@@ -37,7 +37,7 @@ class Family::AutoMerchantDetector
           name: auto_detection.business_name,
           website_url: auto_detection.business_url,
         ) do |pm|
-          pm.logo_url = "#{default_logo_provider_url}/#{auto_detection.business_url}"
+          pm.logo_url = default_logo_provider_url ? "#{default_logo_provider_url}/#{auto_detection.business_url}" : nil
         end
       end
 
@@ -66,7 +66,8 @@ class Family::AutoMerchantDetector
     end
 
     def default_logo_provider_url
-      "https://logo.synthfinance.com"
+      # Synth is no longer operational, so we don't set logo URLs
+      nil
     end
 
     def user_merchants_input

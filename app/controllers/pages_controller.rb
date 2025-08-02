@@ -1,7 +1,19 @@
 class PagesController < ApplicationController
   include Periodable
 
-  skip_authentication only: :redis_configuration_error
+  skip_authentication only: [:redis_configuration_error, :landing, :privacy, :terms]
+
+  def landing
+    render layout: "blank"
+  end
+
+  def privacy
+    render layout: "blank"
+  end
+
+  def terms
+    render layout: "blank"
+  end
 
   def dashboard
     @balance_sheet = Current.family.balance_sheet

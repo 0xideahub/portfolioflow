@@ -94,6 +94,60 @@ class User < ApplicationRecord
     ai_enabled && ai_available?
   end
 
+  def ai_status_color(user)
+    case ai_status_for_user(user)
+    when :available
+      "text-green-600"
+    when :disabled
+      "text-yellow-600"
+    when :unavailable
+      "text-red-600"
+    end
+  end
+
+  # AI Usage Tracking
+  def ai_usage_stats(days: 30)
+    end_date = Date.current
+    start_date = end_date - days.days
+    
+    recent_chats = chats.where(created_at: start_date..end_date)
+    total_messages = recent_chats.joins(:messages).count
+    
+    {
+      total_chats: recent_chats.count,
+      total_messages: total_messages,
+      avg_messages_per_chat: recent_chats.any? ? (total_messages.to_f / recent_chats.count).round(1) : 0,
+      error_rate: calculate_ai_error_rate(recent_chats),
+      estimated_cost: estimate_ai_cost(total_messages),
+      usage_trend: calculate_usage_trend(days)
+    }
+  end
+
+  def ai_usage_warnings
+    warnings = []
+    
+    # Check for high error rates
+    recent_stats = ai_usage_stats(days: 7)
+    if recent_stats[:error_rate] > 20
+      warnings << {
+        type: "high_error_rate",
+        message: "High error rate detected. Consider checking your AI configuration.",
+        severity: "warning"
+      }
+    end
+    
+    # Check for high usage
+    if recent_stats[:total_messages] > 100
+      warnings << {
+        type: "high_usage",
+        message: "High AI usage detected. Monitor your API costs.",
+        severity: "info"
+      }
+    end
+    
+    warnings
+  end
+
   # Deactivation
   validate :can_deactivate, if: -> { active_changed? && !active }
   after_update_commit :purge_later, if: -> { saved_change_to_active?(from: true, to: false) }
@@ -207,5 +261,29 @@ class User < ApplicationRecord
 
     def generate_backup_codes
       8.times.map { SecureRandom.hex(4) }
+    end
+
+    def calculate_ai_error_rate(chats)
+      return 0 if chats.empty?
+      
+      error_count = chats.where("error IS NOT NULL").count
+      (error_count.to_f / chats.count * 100).round(1)
+    end
+
+    def estimate_ai_cost(message_count)
+      # Rough estimate: $0.03 per 1K tokens, ~100 tokens per message
+      estimated_tokens = message_count * 100
+      estimated_cost = (estimated_tokens / 1000.0) * 0.03
+      estimated_cost.round(2)
+    end
+
+    def calculate_usage_trend(days)
+      return [] if days < 7
+      
+      (0..6).map do |i|
+        date = Date.current - i.days
+        count = chats.where(created_at: date.beginning_of_day..date.end_of_day).count
+        { date: date, count: count }
+      end.reverse
     end
 end

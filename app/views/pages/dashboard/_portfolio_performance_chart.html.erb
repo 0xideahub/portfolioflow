@@ -1,0 +1,81 @@
+<%# locals: (balance_sheet:, period:, **args) %>
+
+<div id="portfolio-performance-chart">
+  <% series = balance_sheet.net_worth_series(period: period) %>
+  <div class="flex justify-between gap-4 px-4">
+    <div class="space-y-2">
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <p class="text-sm text-secondary font-medium">Portfolio Performance</p>
+        </div>
+
+        <p class="text-primary -space-x-0.5 text-3xl font-medium <%= "animate-pulse" if balance_sheet.syncing? %>">
+          <%= series.trend.current.format %>
+        </p>
+
+        <% if series.trend.nil? %>
+          <p class="text-sm text-secondary">Performance data not available</p>
+        <% else %>
+          <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form_with url: root_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
+      <%= form.select :period,
+                    Period.as_options,
+                    { selected: period.key },
+                    data: { "auto-submit-form-target": "auto" },
+                    class: "bg-container border border-secondary font-medium rounded-lg px-3 py-2 text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0" %>
+    <% end %>
+  </div>
+
+  <% if series.any? %>
+    <div
+    id="portfolioPerformanceChart"
+    class="w-full flex-1 min-h-52"
+    data-controller="time-series-chart"
+    data-time-series-chart-data-value="<%= series.to_json %>"></div>
+  <% else %>
+    <div class="w-full h-full flex items-center justify-center">
+      <p class="text-secondary text-sm">Add investments to see performance data</p>
+    </div>
+  <% end %>
+
+  <!-- Investment Insights -->
+  <div class="px-4 pt-4">
+    <div class="bg-surface rounded-lg p-4 space-y-3">
+      <h3 class="text-sm font-medium text-primary">Portfolio Insights</h3>
+      
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-secondary">Total Assets</p>
+          <p class="text-primary font-medium"><%= format_money(balance_sheet.assets.total_money) %></p>
+        </div>
+        <div>
+          <p class="text-secondary">Net Worth</p>
+          <p class="text-primary font-medium"><%= format_money(balance_sheet.net_worth_money) %></p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <%= render DS::Link.new(
+          icon: "plus",
+          text: "Add Investment",
+          href: new_account_path,
+          frame: :modal,
+          variant: "secondary",
+          size: "sm"
+        ) %>
+        
+        <%= render DS::Link.new(
+          icon: "trending-up",
+          text: "View Details",
+          href: accounts_path,
+          variant: "secondary",
+          size: "sm"
+        ) %>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -15,6 +15,13 @@ Rails.application.routes.draw do
   # Uses basic auth - see config/initializers/sidekiq.rb
   mount Sidekiq::Web => "/sidekiq"
 
+  # Landing page
+  get "landing", to: "pages#landing"
+  
+  # Legal pages
+  get "privacy", to: "pages#privacy"
+  get "terms", to: "pages#terms"
+
   # AI chats
   resources :chats do
     resources :messages, only: :create
@@ -57,6 +64,7 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :profile, only: [ :show, :destroy ]
     resource :preferences, only: :show
+    resource :ai, only: [ :show, :update ]
     resource :hosting, only: %i[show update] do
       delete :clear_cache, on: :collection
     end

@@ -1,0 +1,89 @@
+<div class="min-h-screen bg-surface">
+  <!-- Header -->
+  <header class="bg-container shadow-border-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div class="flex items-center gap-2">
+          <%= icon "trending-up", class: "text-primary" %>
+          <span class="text-2xl font-bold text-primary">PortfolioFlow</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <%= link_to "Sign In", new_session_path, class: "text-primary hover:text-primary-dark font-medium" %>
+          <%= link_to "Get Started", new_registration_path, class: "bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-dark" %>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-primary mb-6">
+        Track Your Investment Portfolio
+      </h1>
+      <p class="text-xl text-secondary mb-8 max-w-3xl mx-auto">
+        PortfolioFlow helps you monitor your investments, track performance, and achieve your financial goals with professional-grade tools.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <%= link_to "Start Free Trial", new_registration_path, class: "bg-primary text-white px-8 py-3 rounded-lg font-medium text-lg hover:bg-primary-dark" %>
+        <%= link_to "Learn More", "#features", class: "border border-primary text-primary px-8 py-3 rounded-lg font-medium text-lg hover:bg-primary hover:text-white" %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-container">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-primary text-center mb-12">Professional Investment Tools</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="bg-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <%= icon "trending-up", class: "text-white text-2xl" %>
+          </div>
+          <h3 class="text-xl font-semibold text-primary mb-2">Portfolio Performance</h3>
+          <p class="text-secondary">Track your investment performance with real-time charts and insights.</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="bg-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <%= icon "target", class: "text-white text-2xl" %>
+          </div>
+          <h3 class="text-xl font-semibold text-primary mb-2">Investment Goals</h3>
+          <p class="text-secondary">Set and track progress toward your financial goals with visual indicators.</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="bg-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <%= icon "refresh-cw", class: "text-white text-2xl" %>
+          </div>
+          <h3 class="text-xl font-semibold text-primary mb-2">Portfolio Rebalancing</h3>
+          <p class="text-secondary">Keep your portfolio aligned with your target allocation automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-primary mb-4">Ready to Start?</h2>
+      <p class="text-xl text-secondary mb-8">Join thousands of investors who trust PortfolioFlow to manage their portfolios.</p>
+      <%= link_to "Get Started Free", new_registration_path, class: "bg-primary text-white px-8 py-3 rounded-lg font-medium text-lg hover:bg-primary-dark" %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-container shadow-border-xs py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <%= icon "trending-up", class: "text-primary" %>
+          <span class="text-xl font-bold text-primary">PortfolioFlow</span>
+        </div>
+        <p class="text-secondary">&copy; 2025 PortfolioFlow. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div> 

@@ -1,0 +1,277 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-primary">AI Settings</h1>
+      <p class="text-secondary">Configure your AI assistant and automation features</p>
+    </div>
+  </div>
+
+  <%# AI Status Card %>
+  <div class="rounded-lg border border-border bg-container p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <%= icon(ai_status_icon(Current.user), class: "w-6 h-6 #{ai_status_color(Current.user)}") %>
+      <div>
+        <h2 class="text-lg font-medium text-primary">AI Status</h2>
+        <p class="text-sm text-secondary"><%= ai_status_message(Current.user) %></p>
+      </div>
+    </div>
+
+    <%# Status Details %>
+    <div class="space-y-3">
+      <div class="flex items-center justify-between p-3 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2">
+          <%= icon("zap", class: "w-4 h-4 text-secondary") %>
+          <span class="text-sm font-medium text-primary">AI Available</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <% if Current.user.ai_available? %>
+            <%= icon("check-circle", class: "w-4 h-4 text-green-600") %>
+            <span class="text-xs text-green-600">Available</span>
+          <% else %>
+            <%= icon("x-circle", class: "w-4 h-4 text-red-600") %>
+            <span class="text-xs text-red-600">Unavailable</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2">
+          <%= icon("toggle-right", class: "w-4 h-4 text-secondary") %>
+          <span class="text-sm font-medium text-primary">AI Enabled</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <% if Current.user.ai_enabled? %>
+            <%= icon("check-circle", class: "w-4 h-4 text-green-600") %>
+            <span class="text-xs text-green-600">Enabled</span>
+          <% else %>
+            <%= icon("x-circle", class: "w-4 h-4 text-yellow-600") %>
+            <span class="text-xs text-yellow-600">Disabled</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2">
+          <%= icon("sidebar", class: "w-4 h-4 text-secondary") %>
+          <span class="text-sm font-medium text-primary">AI Sidebar</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <% if Current.user.show_ai_sidebar? %>
+            <%= icon("check-circle", class: "w-4 h-4 text-green-600") %>
+            <span class="text-xs text-green-600">Visible</span>
+          <% else %>
+            <%= icon("x-circle", class: "w-4 h-4 text-gray-600") %>
+            <span class="text-xs text-gray-600">Hidden</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# Setup Instructions for Self-hosted %>
+    <% if ai_status_for_user(Current.user) == :unavailable && Rails.application.config.app_mode.self_hosted? %>
+      <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= icon("alert-triangle", class: "w-5 h-5 text-yellow-600 mt-0.5") %>
+          <div>
+            <h3 class="text-sm font-medium text-yellow-800 mb-2">Setup Required</h3>
+            <p class="text-sm text-yellow-700 mb-3">To enable AI features, you need to configure your OpenAI API key:</p>
+            <ol class="list-decimal list-inside space-y-1 text-sm text-yellow-700">
+              <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" class="underline">OpenAI Platform</a></li>
+              <li>Add it to your environment variables: <code class="bg-yellow-100 px-2 py-1 rounded text-xs">OPENAI_ACCESS_TOKEN=your_key_here</code></li>
+              <li>Restart the application</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%# AI Configuration Form %>
+  <% if Current.user.ai_available? %>
+    <div class="rounded-lg border border-border bg-container p-6">
+      <h2 class="text-lg font-medium text-primary mb-4">AI Configuration</h2>
+      
+      <%= form_with model: Current.user, url: settings_ai_path, method: :patch, local: true do |form| %>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-surface-inset rounded-lg">
+            <div>
+              <h3 class="font-medium text-primary">Enable AI Assistant</h3>
+              <p class="text-sm text-secondary">Allow AI to help with financial questions and analysis</p>
+            </div>
+            <%= form.check_box :ai_enabled, class: "w-4 h-4 text-primary bg-container border-border rounded focus:ring-primary focus:ring-2" %>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-surface-inset rounded-lg">
+            <div>
+              <h3 class="font-medium text-primary">Show AI Sidebar</h3>
+              <p class="text-sm text-secondary">Display the AI chat sidebar in the main interface</p>
+            </div>
+            <%= form.check_box :show_ai_sidebar, class: "w-4 h-4 text-primary bg-container border-border rounded focus:ring-primary focus:ring-2" %>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <%= form.submit "Save AI Settings", class: "cursor-pointer hover:bg-inverse-hover px-4 py-2 bg-inverse fg-inverse rounded-lg text-sm font-medium" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Usage Statistics %>
+    <div class="rounded-lg border border-border bg-container p-6">
+      <h2 class="text-lg font-medium text-primary mb-4">Usage Statistics</h2>
+      
+      <%# Usage Warnings %>
+      <% if @usage_warnings.any? %>
+        <div class="mb-4 space-y-2">
+          <% @usage_warnings.each do |warning| %>
+            <div class="flex items-center gap-2 p-3 rounded-lg <%= warning[:severity] == 'warning' ? 'bg-yellow-50 border border-yellow-200' : 'bg-blue-50 border border-blue-200' %>">
+              <%= icon(warning[:severity] == 'warning' ? 'alert-triangle' : 'info', class: "w-4 h-4 #{warning[:severity] == 'warning' ? 'text-yellow-600' : 'text-blue-600'}") %>
+              <span class="text-sm <%= warning[:severity] == 'warning' ? 'text-yellow-800' : 'text-blue-800' %>"><%= warning[:message] %></span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="p-4 bg-surface-inset rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <%= icon("message-circle", class: "w-5 h-5 text-primary") %>
+            <h3 class="font-medium text-primary">Total Chats</h3>
+          </div>
+          <p class="text-2xl font-bold text-primary"><%= @ai_stats[:total_chats] %></p>
+          <p class="text-sm text-secondary">All time</p>
+        </div>
+
+        <div class="p-4 bg-surface-inset rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <%= icon("calendar", class: "w-5 h-5 text-primary") %>
+            <h3 class="font-medium text-primary">Recent Activity</h3>
+          </div>
+          <p class="text-2xl font-bold text-primary"><%= @ai_stats[:recent_chats] %></p>
+          <p class="text-sm text-secondary">Last 7 days</p>
+        </div>
+
+        <div class="p-4 bg-surface-inset rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <%= icon("alert-triangle", class: "w-5 h-5 text-primary") %>
+            <h3 class="font-medium text-primary">Error Rate</h3>
+          </div>
+          <p class="text-2xl font-bold <%= @ai_stats[:error_rate] > 10 ? 'text-red-600' : 'text-primary' %>">
+            <%= @ai_stats[:error_rate] %>%
+          </p>
+          <p class="text-sm text-secondary">Last 7 days</p>
+        </div>
+
+        <div class="p-4 bg-surface-inset rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <%= icon("clock", class: "w-5 h-5 text-primary") %>
+            <h3 class="font-medium text-primary">Last Used</h3>
+          </div>
+          <% if @ai_stats[:last_used] %>
+            <p class="text-lg font-medium text-primary">
+              <%= time_ago_in_words(@ai_stats[:last_used]) %> ago
+            </p>
+          <% else %>
+            <p class="text-lg font-medium text-secondary">Never</p>
+          <% end %>
+          <p class="text-sm text-secondary">Most recent chat</p>
+        </div>
+      </div>
+
+      <%# Detailed Usage Stats %>
+      <div class="mt-6 p-4 bg-surface-inset rounded-lg">
+        <h3 class="font-medium text-primary mb-3">Last 30 Days</h3>
+        <div class="grid gap-4 md:grid-cols-3">
+          <div>
+            <p class="text-sm text-secondary">Total Messages</p>
+            <p class="text-lg font-medium text-primary"><%= @usage_stats[:total_messages] %></p>
+          </div>
+          <div>
+            <p class="text-sm text-secondary">Avg Messages/Chat</p>
+            <p class="text-lg font-medium text-primary"><%= @usage_stats[:avg_messages_per_chat] %></p>
+          </div>
+          <div>
+            <p class="text-sm text-secondary">Estimated Cost</p>
+            <p class="text-lg font-medium text-primary">$<%= @usage_stats[:estimated_cost] %></p>
+          </div>
+        </div>
+      </div>
+
+      <%# Usage Trend Chart %>
+      <% if @usage_stats[:usage_trend].any? %>
+        <div class="mt-6 p-4 bg-surface-inset rounded-lg">
+          <h3 class="font-medium text-primary mb-3">Usage Trend (Last 7 Days)</h3>
+          <div class="flex items-end gap-1 h-20">
+            <% @usage_stats[:usage_trend].each do |day| %>
+              <div class="flex-1 flex flex-col items-center">
+                <div class="w-full bg-primary rounded-t" style="height: <%= [day[:count] * 3, 1].max %>px; max-height: 60px;"></div>
+                <span class="text-xs text-secondary mt-1"><%= day[:date].strftime("%a") %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# AI Features Information %>
+  <div class="rounded-lg border border-border bg-container p-6">
+    <h2 class="text-lg font-medium text-primary mb-4">AI Features</h2>
+    
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="p-4 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon("message-circle", class: "w-5 h-5 text-primary") %>
+          <h3 class="font-medium text-primary">AI Chat</h3>
+        </div>
+        <p class="text-sm text-secondary">Ask questions about your finances and get personalized insights</p>
+      </div>
+
+      <div class="p-4 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon("tags", class: "w-5 h-5 text-primary") %>
+          <h3 class="font-medium text-primary">Auto-categorization</h3>
+        </div>
+        <p class="text-sm text-secondary">Automatically categorize transactions using AI</p>
+      </div>
+
+      <div class="p-4 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon("building", class: "w-5 h-5 text-primary") %>
+          <h3 class="font-medium text-primary">Merchant Detection</h3>
+        </div>
+        <p class="text-sm text-secondary">Identify and standardize merchant names automatically</p>
+      </div>
+
+      <div class="p-4 bg-surface-inset rounded-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <%= icon("zap", class: "w-5 h-5 text-primary") %>
+          <h3 class="font-medium text-primary">Rules Engine</h3>
+        </div>
+        <p class="text-sm text-secondary">Create automated rules for transaction processing</p>
+      </div>
+    </div>
+  </div>
+
+  <%# Privacy Information %>
+  <div class="rounded-lg border border-border bg-container p-6">
+    <h2 class="text-lg font-medium text-primary mb-4">Privacy & Security</h2>
+    
+    <div class="space-y-3 text-sm text-secondary">
+      <div class="flex items-start gap-2">
+        <%= icon("shield", class: "w-4 h-4 text-green-600 mt-0.5") %>
+        <p>All data sent to AI providers is anonymized and encrypted</p>
+      </div>
+      
+      <div class="flex items-start gap-2">
+        <%= icon("eye-off", class: "w-4 h-4 text-green-600 mt-0.5") %>
+        <p>No personal information is stored by AI providers</p>
+      </div>
+      
+      <div class="flex items-start gap-2">
+        <%= icon("toggle-left", class: "w-4 h-4 text-green-600 mt-0.5") %>
+        <p>You can disable AI features at any time</p>
+      </div>
+    </div>
+  </div>
+</div> 

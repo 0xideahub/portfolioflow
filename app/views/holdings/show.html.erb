@@ -6,7 +6,7 @@
         <%= tag.p @holding.ticker, class: "text-sm text-secondary" %>
       </div>
 
-      <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", loading: "lazy", class: "w-9 h-9 rounded-full" %>
+      <%= render DS::FilledIcon.new(variant: :text, hex_color: "#3B82F6", text: @holding.ticker, size: "md", rounded: true) %>
     </div>
   <% end %>
 

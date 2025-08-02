@@ -1,40 +1,55 @@
-<div class="flex items-start w-full gap-3 p-2">
-  <%= render "chats/ai_avatar" %>
+<%# locals: (context: nil) %>
 
-  <div class="max-w-[85%] text-sm space-y-4 text-primary">
-    <p>Hey <%= Current.user&.first_name || "there" %>! I'm an AI built by Maybe to help with your finances. I have access to the web and your account data.</p>
-
-    <p>
-      You can use <span class="bg-container border border-secondary px-1.5 py-0.5 rounded font-mono text-xs">/</span> to access commands
-    </p>
-
-    <div class="space-y-3">
-      <p>Here's a few questions you can ask:</p>
-
-      <% questions = [
-        {
-          icon: "chart-area",
-          text: "Evaluate investment portfolio"
-        },
-        {
-          icon: "wallet-minimal",
-          text: "Show spending insights"
-        },
-        {
-          icon: "alert-triangle",
-          text: "Find unusual patterns"
-        }
-      ] %>
-
-      <div class="space-y-2.5">
-        <% questions.each do |question| %>
-          <button data-action="chat#submitSampleQuestion"
-                  data-chat-question-param="<%= question[:text] %>"
-                  class="w-fit flex items-center gap-2 border border-tertiary rounded-full py-1.5 px-2.5 hover:bg-gray-100">
-            <%= icon(question[:icon]) %> <%= question[:text] %>
-          </button>
-        <% end %>
+<div class="text-center space-y-4">
+  <% if Current.user.ai_enabled? %>
+    <div class="space-y-2">
+      <div class="flex justify-center mb-4">
+        <%= render "chats/ai_avatar" %>
       </div>
+      
+      <h3 class="text-lg font-medium text-primary">Hello! I'm your AI assistant</h3>
+      <p class="text-secondary">Ask me anything about your finances, portfolio, or spending patterns.</p>
     </div>
-  </div>
+  <% else %>
+    <div class="space-y-4">
+      <div class="flex justify-center mb-4">
+        <%= icon("message-circle", class: "w-12 h-12 text-secondary") %>
+      </div>
+      
+      <h3 class="text-lg font-medium text-primary">AI Assistant Unavailable</h3>
+      
+      <% if Current.user.ai_available? %>
+        <p class="text-secondary">Enable AI features to get personalized financial insights and analysis.</p>
+        <%= link_to "Enable AI Assistant", settings_ai_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-inverse fg-inverse rounded-lg text-sm font-medium hover:bg-inverse-hover" %>
+      <% else %>
+        <p class="text-secondary">AI features are currently unavailable. Here are some alternatives:</p>
+        
+        <div class="space-y-3 text-left">
+          <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+            <%= icon("bar-chart-3", class: "w-5 h-5 text-primary mt-0.5") %>
+            <div>
+              <h4 class="font-medium text-primary">View Reports</h4>
+              <p class="text-sm text-secondary">Check your financial reports and analytics</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+            <%= icon("tags", class: "w-5 h-5 text-primary mt-0.5") %>
+            <div>
+              <h4 class="font-medium text-primary">Manage Categories</h4>
+              <p class="text-sm text-secondary">Organize your transactions manually</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+            <%= icon("settings", class: "w-5 h-5 text-primary mt-0.5") %>
+            <div>
+              <h4 class="font-medium text-primary">Configure AI</h4>
+              <p class="text-sm text-secondary">Set up AI features in settings</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

@@ -9,6 +9,44 @@
     <div class="text-center space-y-2">
       <h1 class="text-3xl text-primary font-medium"><%= t(".title") %></h1>
       <p class="text-secondary text-sm"><%= t(".description") %></p>
+      
+      <% if @import.type == "PortfolioAllocationImport" %>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
+          <div class="flex items-start gap-2">
+            <div class="text-blue-600 mt-0.5">
+              <%= icon("info", size: 16) %>
+            </div>
+            <div class="text-sm text-blue-800">
+              <p class="font-medium">Portfolio Allocation Import</p>
+              <p class="text-blue-700 mt-1">This import will create both portfolio valuations and individual security holdings. Perfect for importing your current investment portfolio.</p>
+            </div>
+          </div>
+        </div>
+      <% elsif @import.type == "TradeImport" %>
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-4">
+          <div class="flex items-start gap-2">
+            <div class="text-yellow-600 mt-0.5">
+              <%= icon("info", size: 16) %>
+            </div>
+            <div class="text-sm text-yellow-800">
+              <p class="font-medium">Investment Trade Import</p>
+              <p class="text-yellow-700 mt-1">Import your buy/sell transactions. We'll automatically resolve security symbols and create proper trade records.</p>
+            </div>
+          </div>
+        </div>
+      <% elsif @import.type == "TransactionImport" %>
+        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mt-4">
+          <div class="flex items-start gap-2">
+            <div class="text-indigo-600 mt-0.5">
+              <%= icon("info", size: 16) %>
+            </div>
+            <div class="text-sm text-indigo-800">
+              <p class="font-medium">Investment Transaction Import</p>
+              <p class="text-indigo-700 mt-1">Import investment-related transactions like dividends, contributions, and other investment activities.</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <%= render DS::Tabs.new(active_tab: params[:tab] || "csv-upload", url_param_key: "tab", testid: "import-tabs") do |tabs| %>
@@ -21,17 +59,21 @@
         <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
           <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
-          <% if @import.type == "TransactionImport" || @import.type == "TradeImport" %>
+          <% if @import.type == "TransactionImport" || @import.type == "TradeImport" || @import.type == "PortfolioAllocationImport" %>
             <%= form.select :account_id, @import.family.accounts.visible.pluck(:name, :id), { label: "Account (optional)", include_blank: "Multi-account import", selected: @import.account_id } %>
           <% end %>
 
-          <div class="flex flex-col items-center justify-center w-full h-64 border border-secondary border-dashed rounded-xl cursor-pointer" data-controller="file-upload" data-action="click->file-upload#triggerFileInput" data-file-upload-target="uploadArea">
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+          <div class="flex flex-col items-center justify-center w-full h-64 border border-secondary border-dashed rounded-xl cursor-pointer bg-container-inset hover:bg-container transition-colors" data-controller="file-upload" data-action="click->file-upload#triggerFileInput" data-file-upload-target="uploadArea">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4">
               <div data-file-upload-target="uploadText" class="flex flex-col items-center">
-                <%= icon("plus", size: "lg", class: "mb-4 mx-auto") %>
-                <p class="mb-2 text-md text-gray text-center">
-                  <span class="font-medium text-primary">Browse</span> to add your CSV file here
+                <%= icon("upload", size: "lg", class: "mb-4 mx-auto text-secondary") %>
+                <p class="mb-2 text-md text-secondary text-center">
+                  <span class="font-medium text-primary">Tap to upload</span> or drag and drop
                 </p>
+                <p class="text-xs text-secondary text-center mb-3">CSV files only</p>
+                <div class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium">
+                  Choose CSV File
+                </div>
               </div>
 
               <div class="flex flex-col gap-4 items-center hidden mb-2" data-file-upload-target="fileName">
@@ -53,7 +95,7 @@
         <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
           <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
-          <% if @import.type == "TransactionImport" || @import.type == "TradeImport" %>
+          <% if @import.type == "TransactionImport" || @import.type == "TradeImport" || @import.type == "PortfolioAllocationImport" %>
             <%= form.select :account_id, @import.family.accounts.visible.pluck(:name, :id), { label: "Account (optional)", include_blank: "Multi-account import", selected: @import.account_id } %>
           <% end %>
 

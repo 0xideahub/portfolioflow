@@ -65,9 +65,11 @@ class TradeImport < Import
   def csv_template
     template = <<-CSV
       date*,ticker*,exchange_operating_mic,currency,qty*,price*,account,name
-      05/15/2024,AAPL,XNAS,USD,10,150.00,Trading Account,Apple Inc. Purchase
-      05/16/2024,GOOGL,XNAS,USD,-5,2500.00,Investment Account,Alphabet Inc. Sale
-      05/17/2024,TSLA,XNAS,USD,2,700.50,Retirement Account,Tesla Inc. Purchase
+      01/15/2024,AAPL,XNAS,USD,10,150.00,Brokerage Account,Apple Inc. Purchase
+      01/16/2024,GOOGL,XNAS,USD,-5,2500.00,401k Account,Alphabet Inc. Sale
+      01/17/2024,TSLA,XNAS,USD,2,700.50,IRA Account,Tesla Inc. Purchase
+      01/18/2024,SPY,XNAS,USD,100,450.00,Taxable Account,S&P 500 ETF Buy
+      01/19/2024,VTI,XNAS,USD,-25,220.00,Retirement Account,Vanguard Total Market Sale
     CSV
 
     csv = CSV.parse(template, headers: true)
@@ -88,13 +90,32 @@ class TradeImport < Import
 
       return security if security.present?
 
-      security = Security::Resolver.new(
-        ticker,
-        exchange_operating_mic: exchange_operating_mic.presence
-      ).resolve
+      begin
+        security = Security::Resolver.new(
+          ticker,
+          exchange_operating_mic: exchange_operating_mic.presence
+        ).resolve
 
-      @security_cache[cache_key] = security
+        @security_cache[cache_key] = security
 
-      security
+        security
+      rescue => e
+        Rails.logger.error "Failed to resolve security #{ticker}: #{e.message}"
+        # Return nil to allow the import to continue with an offline security
+        nil
+      end
+    end
+
+    def validate_investment_data
+      rows.each do |row|
+        next unless row.ticker.present?
+        
+        # Validate common investment tickers
+        if row.ticker.match?(/\A[A-Z]{1,5}\z/)
+          # Valid ticker format
+        else
+          row.errors.add(:ticker, "Invalid ticker format. Use 1-5 uppercase letters.")
+        end
+      end
     end
 end

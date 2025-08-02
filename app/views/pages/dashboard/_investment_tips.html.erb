@@ -1,0 +1,49 @@
+<div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4" id="investment-tips">
+  <div class="flex items-center gap-2">
+    <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
+      <span>Investment Tips</span>
+    </h2>
+  </div>
+
+  <div class="space-y-3">
+    <div class="bg-surface rounded-lg p-3">
+      <div class="flex items-start gap-3">
+        <%= icon "lightbulb", class: "text-primary mt-0.5" %>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-primary">Diversify Your Portfolio</p>
+          <p class="text-xs text-secondary">Spread your investments across different asset classes to reduce risk.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface rounded-lg p-3">
+      <div class="flex items-start gap-3">
+        <%= icon "trending-up", class: "text-primary mt-0.5" %>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-primary">Track Performance Regularly</p>
+          <p class="text-xs text-secondary">Monitor your portfolio performance to make informed investment decisions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface rounded-lg p-3">
+      <div class="flex items-start gap-3">
+        <%= icon "calendar", class: "text-primary mt-0.5" %>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-primary">Long-Term Perspective</p>
+          <p class="text-xs text-secondary">Focus on long-term growth rather than short-term market fluctuations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-2">
+    <%= render DS::Link.new(
+      icon: "book-open",
+      text: "Learn More",
+      href: "#",
+      variant: "secondary",
+      size: "sm"
+    ) %>
+  </div>
+</div> 

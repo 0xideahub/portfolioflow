@@ -1,4 +1,4 @@
-<%# locals: (chat:) %>
+<%# locals: (chat:, error_details:) %>
 
 <div id="chat-error" class="px-3 py-2 bg-red-100 border border-red-500 rounded-lg">
   <% if chat.debug_mode? %>
@@ -7,12 +7,60 @@
     </div>
   <% end %>
 
-  <div class="flex items-center justify-between gap-2">
-    <p class="text-xs text-red-500">Failed to generate response.  Please try again.</p>
+  <%# Ensure error_details is a hash %>
+  <% error_details = error_details.is_a?(Hash) ? error_details : { type: "unknown_error", title: "Error", message: "An error occurred. Please try again.", action: "retry" } %>
 
-    <%= render DS::Button.new(
-      text: "Retry",
-      href: retry_chat_path(chat),
-    ) %>
+  <div class="flex items-center justify-between gap-2">
+    <div class="flex-1">
+      <h4 class="text-sm font-medium text-red-700 mb-1"><%= error_details[:title] %></h4>
+      <p class="text-xs text-red-600"><%= error_details[:message] %></p>
+      
+      <% if error_details[:action] == "retry_later" && error_details[:retry_after] %>
+        <p class="text-xs text-red-500 mt-1">
+          You can retry in <%= pluralize(error_details[:retry_after], "second") %>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="flex gap-2">
+      <% case error_details[:action] %>
+      <% when "retry" %>
+        <%= render DS::Button.new(
+          text: "Try Again",
+          href: retry_chat_path(chat),
+          variant: "secondary",
+          size: "sm"
+        ) %>
+      <% when "retry_later" %>
+        <%= render DS::Button.new(
+          text: "Retry Later",
+          href: retry_chat_path(chat),
+          variant: "secondary",
+          size: "sm",
+          disabled: true
+        ) %>
+      <% when "contact_support" %>
+        <%= render DS::Button.new(
+          text: "Contact Support",
+          href: "mailto:support@maybe.co",
+          variant: "secondary",
+          size: "sm"
+        ) %>
+      <% when "contact_admin" %>
+        <%= render DS::Button.new(
+          text: "Contact Admin",
+          href: "mailto:admin@maybe.co",
+          variant: "secondary",
+          size: "sm"
+        ) %>
+      <% else %>
+        <%= render DS::Button.new(
+          text: "Try Again",
+          href: retry_chat_path(chat),
+          variant: "secondary",
+          size: "sm"
+        ) %>
+      <% end %>
+    </div>
   </div>
 </div>

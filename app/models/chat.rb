@@ -43,8 +43,9 @@ class Chat < ApplicationRecord
   end
 
   def add_error(e)
-    update! error: e.to_json
-    broadcast_append target: "messages", partial: "chats/error", locals: { chat: self }
+    error_details = parse_error(e)
+    update! error: error_details.to_json
+    broadcast_append target: "messages", partial: "chats/error", locals: { chat: self, error_details: error_details }
   end
 
   def clear_error
@@ -72,4 +73,88 @@ class Chat < ApplicationRecord
       messages.where(type: [ "UserMessage", "AssistantMessage" ])
     end
   end
+
+  def error_details
+    return nil unless error.present?
+    
+    if error.is_a?(String)
+      begin
+        parsed = JSON.parse(error)
+        Rails.logger.debug "Parsed error details: #{parsed.inspect}"
+        # Ensure we return a hash with symbol keys
+        parsed.is_a?(Hash) ? parsed.symbolize_keys : fallback_error_details
+      rescue JSON::ParserError => e
+        Rails.logger.debug "Failed to parse error JSON: #{error}, error: #{e.message}"
+        fallback_error_details
+      end
+    elsif error.is_a?(Hash)
+      Rails.logger.debug "Error is already a hash: #{error.inspect}"
+      error.symbolize_keys
+    else
+      Rails.logger.debug "Error is not a string or hash: #{error.class}, value: #{error.inspect}"
+      fallback_error_details
+    end
+  end
+
+  private
+
+    def fallback_error_details
+      {
+        type: "unknown_error",
+        title: "Something Went Wrong",
+        message: "We encountered an unexpected error. Please try again.",
+        action: "retry"
+      }
+    end
+
+    def parse_error(error)
+      case error
+      when Provider::Openai::Error
+        case error.message
+        when /rate limit/i
+          {
+            type: "rate_limit",
+            title: "AI Service Temporarily Unavailable",
+            message: "We're experiencing high demand. Please try again in a few minutes.",
+            action: "retry_later",
+            retry_after: 60
+          }
+        when /quota exceeded/i
+          {
+            type: "quota_exceeded", 
+            title: "AI Usage Limit Reached",
+            message: "You've reached your AI usage limit for this period. Please try again later or contact support.",
+            action: "contact_support"
+          }
+        when /invalid api key/i
+          {
+            type: "invalid_api_key",
+            title: "AI Configuration Issue",
+            message: "AI service is not properly configured. Please contact your administrator.",
+            action: "contact_admin"
+          }
+        else
+          {
+            type: "openai_error",
+            title: "AI Service Error",
+            message: "We're having trouble connecting to our AI service. Please try again.",
+            action: "retry"
+          }
+        end
+      when Provider::Error
+        {
+          type: "provider_error",
+          title: "AI Service Unavailable",
+          message: "AI features are currently unavailable. Please try again later.",
+          action: "retry"
+        }
+      else
+        {
+          type: "unknown_error",
+          title: "Something Went Wrong",
+          message: "We encountered an unexpected error. Please try again.",
+          action: "retry"
+        }
+      end
+    end
 end

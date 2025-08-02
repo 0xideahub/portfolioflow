@@ -18,24 +18,34 @@
     </div>
   </div>
 
-  <%= render DS::Menu.new(icon_vertical: true) do |menu| %>
-    <% menu.with_item(variant: "link", text: "Start new chat", href: new_chat_path, icon: "plus") %>
+  <div class="flex items-center gap-3">
+    <%# AI Status Indicator %>
+    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-inset border border-border">
+      <div class="flex items-center gap-1">
+        <%= icon(ai_status_icon(Current.user), class: "w-4 h-4 #{ai_status_color(Current.user)}") %>
+        <span class="text-xs text-secondary"><%= ai_status_message(Current.user) %></span>
+      </div>
+    </div>
 
-    <% unless chat.new_record? %>
-      <% menu.with_item(
-        variant: "link",
-        text: "Edit chat title",
-        href: edit_chat_path(chat, ctx: "chat"),
-        icon: "pencil",
-        frame: dom_id(chat, "title")) %>
+    <%= render DS::Menu.new(icon_vertical: true) do |menu| %>
+      <% menu.with_item(variant: "link", text: "Start new chat", href: new_chat_path, icon: "plus") %>
 
-      <% menu.with_item(
-        variant: "button",
-        text: "Delete chat",
-        href: chat_path(chat),
-        icon: "trash-2",
-        method: :delete,
-        confirm: CustomConfirm.for_resource_deletion("chat")) %>
+      <% unless chat.new_record? %>
+        <% menu.with_item(
+          variant: "link",
+          text: "Edit chat title",
+          href: edit_chat_path(chat, ctx: "chat"),
+          icon: "pencil",
+          frame: dom_id(chat, "title")) %>
+
+        <% menu.with_item(
+          variant: "button",
+          text: "Delete chat",
+          href: chat_path(chat),
+          icon: "trash-2",
+          method: :delete,
+          confirm: CustomConfirm.for_resource_deletion("chat")) %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </nav>

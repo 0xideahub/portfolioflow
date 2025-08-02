@@ -1,0 +1,101 @@
+<%# locals: (user:) %>
+
+<div class="rounded-lg border border-border bg-container p-6">
+  <div class="text-center mb-6">
+    <div class="flex justify-center mb-4">
+      <%= render "chats/ai_avatar" %>
+    </div>
+    <h3 class="text-lg font-medium text-primary mb-2">Welcome to AI Assistant!</h3>
+    <p class="text-secondary">Let's get you started with AI-powered financial insights</p>
+  </div>
+
+  <div class="space-y-4">
+    <%# Step 1: Enable AI %>
+    <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+      <div class="flex-shrink-0 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium">
+        1
+      </div>
+      <div class="flex-1">
+        <h4 class="font-medium text-primary">Enable AI Features</h4>
+        <p class="text-sm text-secondary mb-2">Turn on AI assistant to get started</p>
+        <% if user.ai_enabled? %>
+          <div class="flex items-center gap-2 text-sm text-green-600">
+            <%= icon("check-circle", class: "w-4 h-4") %>
+            <span>AI Assistant enabled</span>
+          </div>
+        <% else %>
+          <%= link_to "Enable AI", settings_ai_path, class: "inline-flex items-center gap-2 px-3 py-1 bg-primary text-white rounded text-sm hover:bg-primary-hover" %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Step 2: Try First Chat %>
+    <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+      <div class="flex-shrink-0 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium">
+        2
+      </div>
+      <div class="flex-1">
+        <h4 class="font-medium text-primary">Try Your First Chat</h4>
+        <p class="text-sm text-secondary mb-2">Ask a question to see AI in action</p>
+        <div class="space-y-2">
+          <button data-action="chat#submitSampleQuestion" 
+                  data-chat-question-param="What's my current net worth?"
+                  class="w-full text-left p-2 bg-container border border-border rounded text-sm hover:bg-surface-hover">
+            "What's my current net worth?"
+          </button>
+          <button data-action="chat#submitSampleQuestion" 
+                  data-chat-question-param="Show me my spending patterns"
+                  class="w-full text-left p-2 bg-container border border-border rounded text-sm hover:bg-surface-hover">
+            "Show me my spending patterns"
+          </button>
+          <button data-action="chat#submitSampleQuestion" 
+                  data-chat-question-param="Analyze my investment portfolio"
+                  class="w-full text-left p-2 bg-container border border-border rounded text-sm hover:bg-surface-hover">
+            "Analyze my investment portfolio"
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <%# Step 3: Explore Features %>
+    <div class="flex items-start gap-3 p-3 bg-surface-inset rounded-lg">
+      <div class="flex-shrink-0 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium">
+        3
+      </div>
+      <div class="flex-1">
+        <h4 class="font-medium text-primary">Explore AI Features</h4>
+        <p class="text-sm text-secondary mb-2">Discover what AI can help you with</p>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="flex items-center gap-1">
+            <%= icon("message-circle", class: "w-3 h-3 text-primary") %>
+            <span>Financial Q&A</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <%= icon("tags", class: "w-3 h-3 text-primary") %>
+            <span>Auto-categorization</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <%= icon("bar-chart-3", class: "w-3 h-3 text-primary") %>
+            <span>Portfolio analysis</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <%= icon("zap", class: "w-3 h-3 text-primary") %>
+            <span>Smart rules</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 pt-4 border-t border-border">
+    <div class="flex items-center justify-between">
+      <div class="text-sm text-secondary">
+        <p>Need help? Check out our <a href="#" class="underline">AI guide</a></p>
+      </div>
+      <button data-action="click->chat#dismissOnboarding" 
+              class="text-sm text-secondary hover:text-primary">
+        Dismiss
+      </button>
+    </div>
+  </div>
+</div> 

@@ -7,8 +7,18 @@
     </div>
 
     <div class="text-center space-y-2">
-      <h1 class="font-medium text-primary text-center text-3xl">Import in progress</h1>
-      <p class="text-sm text-secondary">Your import is in progress. Check the imports menu for status updates or click 'Check Status' to refresh the page for updates. Feel free to continue using the app.</p>
+      <h1 class="font-medium text-primary text-center text-3xl">Processing Investment Data</h1>
+      <p class="text-sm text-secondary">
+        <% if import.type == "PortfolioAllocationImport" %>
+          We're importing your portfolio allocation and creating security holdings. This may take a few moments.
+        <% elsif import.type == "TradeImport" %>
+          We're processing your investment trades and resolving security symbols. This may take a few moments.
+        <% elsif import.type == "TransactionImport" %>
+          We're importing your investment transactions and categorizing them. This may take a few moments.
+        <% else %>
+          Your import is in progress. Check the imports menu for status updates or click 'Check Status' to refresh the page for updates. Feel free to continue using the app.
+        <% end %>
+      </p>
     </div>
 
     <div class="space-y-2 flex flex-col">

@@ -1,0 +1,44 @@
+SYNTH API REMOVAL - COMPLETED CHANGES
+=====================================
+
+Since Synth API is no longer operational, we've removed all warnings and references to it.
+
+CHANGES MADE:
+=============
+
+✅ REMOVED MISSING HISTORICAL DATA WARNING
+------------------------------------------
+- Removed the warning banner from app/views/accounts/_account_sidebar_tabs.html.erb
+- Updated Family#missing_data_provider? method to always return false
+- No more "Missing historical data" warnings will appear
+
+✅ CLEANED UP SETTINGS PAGES
+----------------------------
+- Removed Synth settings section from app/views/settings/hostings/show.html.erb
+- Cleaned up app/controllers/settings/hostings_controller.rb
+  - Removed Synth provider lookup
+  - Removed Synth API key handling
+  - Updated permitted parameters
+
+✅ REPLACED BROKEN LOGO URLS
+----------------------------
+- Replaced Synth logo URLs in account logos (app/views/accounts/_logo.html.erb)
+- Replaced Synth logo URLs in holding displays (app/views/holdings/_holding.html.erb)
+- Replaced Synth logo URLs in holding details (app/views/holdings/show.html.erb)
+- Updated auto merchant detector to not set logo URLs (app/models/family/auto_merchant_detector.rb)
+
+✅ TECHNICAL IMPROVEMENTS
+-------------------------
+- All Synth API references removed from UI
+- Fallback to appropriate icons instead of broken logo URLs
+- Cleaner settings interface without non-functional Synth options
+- No more confusing warnings about missing API keys
+
+BENEFITS:
+=========
+- Cleaner user experience without confusing warnings
+- No more broken logo URLs that fail to load
+- Simplified settings interface
+- Better performance (no failed API calls to Synth)
+
+The application now runs cleanly without any references to the non-operational Synth API, providing a better user experience. 

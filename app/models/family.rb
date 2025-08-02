@@ -85,7 +85,8 @@ class Family < ApplicationRecord
   end
 
   def missing_data_provider?
-    requires_data_provider? && Provider::Registry.get_provider(:synth).nil?
+    # Synth API is no longer operational, so we don't show missing data provider warnings
+    false
   end
 
   def oldest_entry_date
