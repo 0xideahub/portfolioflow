@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Anonymize Git commits to prevent identity leaks
+# This script ensures all commits use anonymous identity
+
+echo "🔒 Setting up anonymous Git identity..."
+
+# Set anonymous Git identity
+git config --global user.name "PortfolioFlow"
+git config --global user.email "dev@portfolioflow.com"
+
+# Set commit template to ensure anonymous commits
+cat > ~/.gitmessage << 'EOF'
+# PortfolioFlow Development
+
+## Changes Made
+- 
+
+## Why This Change
+- 
+
+## Testing
+- [ ] Tests pass
+- [ ] Manual testing completed
+
+# Anonymous commit - no personal information
+EOF
+
+git config --global commit.template ~/.gitmessage
+
+echo "✅ Git identity anonymized"
+echo "✅ Commit template set"
+echo "✅ Future commits will be anonymous" 

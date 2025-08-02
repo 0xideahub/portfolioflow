@@ -23,6 +23,8 @@ RAILS_MASTER_KEY=e832ed5289c81b7ea48716f4033ac674
 RAILS_ENV=production
 RAILS_SERVE_STATIC_FILES=true
 RAILS_LOG_TO_STDOUT=true
+RAILS_FORCE_SSL=true
+RAILS_ASSUME_SSL=true
 ```
 
 **Optional (for full functionality):**

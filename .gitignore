@@ -94,6 +94,12 @@ node_modules/
 *.roo*
 # OS specific
 # Task files
+
+# Privacy protection - prevent hostname and personal info leaks
+*.hostname
+*.local
+hostname.txt
+personal_info.txt
 .taskmaster/
 tasks.json
 .taskmaster/tasks/
