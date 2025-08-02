@@ -154,7 +154,7 @@ module ApplicationHelper
 
   def ai_availability_notification
     return nil unless Current.user.present?
-    
+
     case ai_status_for_user(Current.user)
     when :available
       nil # No notification needed when available

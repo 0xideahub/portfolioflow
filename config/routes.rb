@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   # Landing page
   get "landing", to: "pages#landing"
-  
+
   # Legal pages
   get "privacy", to: "pages#privacy"
   get "terms", to: "pages#terms"

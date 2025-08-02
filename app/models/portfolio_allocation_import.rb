@@ -28,7 +28,7 @@ class PortfolioAllocationImport < Import
       # Create holdings for each security
       holdings = rows.flat_map do |row|
         next [] unless row.ticker.present?
-        
+
         mapped_account = if account
           account
         else
@@ -74,7 +74,7 @@ class PortfolioAllocationImport < Import
   end
 
   def dry_run
-    mappings = { 
+    mappings = {
       valuations: rows.count,
       holdings: rows.select { |row| row.ticker.present? }.count
     }
@@ -128,4 +128,4 @@ class PortfolioAllocationImport < Import
         nil
       end
     end
-end 
+end

@@ -8,7 +8,7 @@ class Settings::AiController < ApplicationController
 
   def update
     @user = Current.user
-    
+
     if @user.update(ai_params)
       redirect_to settings_ai_path, notice: "AI settings updated successfully."
     else
@@ -35,8 +35,8 @@ class Settings::AiController < ApplicationController
     def calculate_error_rate
       recent_chats = Current.user.chats.where("created_at > ?", 7.days.ago)
       return 0 if recent_chats.empty?
-      
+
       error_count = recent_chats.where("error IS NOT NULL").count
       (error_count.to_f / recent_chats.count * 100).round(1)
     end
-end 
+end

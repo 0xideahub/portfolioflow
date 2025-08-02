@@ -62,7 +62,7 @@ class Assistant
     responder.respond(previous_response_id: latest_response_id)
   rescue => e
     stop_thinking
-    
+
     if should_retry?(e) && retry_count < MAX_RETRIES
       retry_with_backoff(e)
     else
@@ -99,11 +99,11 @@ class Assistant
     def retry_with_backoff(error)
       @retry_count ||= 0
       @retry_count += 1
-      
+
       delay = INITIAL_RETRY_DELAY * (2 ** (retry_count - 1))
-      
+
       Rails.logger.info "Retrying AI request (attempt #{retry_count}/#{MAX_RETRIES}) after #{delay} seconds"
-      
+
       AssistantResponseJob.set(wait: delay).perform_later(chat.messages.last)
     end
 end

@@ -76,7 +76,7 @@ class Chat < ApplicationRecord
 
   def error_details
     return nil unless error.present?
-    
+
     if error.is_a?(String)
       begin
         parsed = JSON.parse(error)
@@ -121,7 +121,7 @@ class Chat < ApplicationRecord
           }
         when /quota exceeded/i
           {
-            type: "quota_exceeded", 
+            type: "quota_exceeded",
             title: "AI Usage Limit Reached",
             message: "You've reached your AI usage limit for this period. Please try again later or contact support.",
             action: "contact_support"

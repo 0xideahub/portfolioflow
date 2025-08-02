@@ -109,10 +109,10 @@ class User < ApplicationRecord
   def ai_usage_stats(days: 30)
     end_date = Date.current
     start_date = end_date - days.days
-    
+
     recent_chats = chats.where(created_at: start_date..end_date)
     total_messages = recent_chats.joins(:messages).count
-    
+
     {
       total_chats: recent_chats.count,
       total_messages: total_messages,
@@ -125,7 +125,7 @@ class User < ApplicationRecord
 
   def ai_usage_warnings
     warnings = []
-    
+
     # Check for high error rates
     recent_stats = ai_usage_stats(days: 7)
     if recent_stats[:error_rate] > 20
@@ -135,7 +135,7 @@ class User < ApplicationRecord
         severity: "warning"
       }
     end
-    
+
     # Check for high usage
     if recent_stats[:total_messages] > 100
       warnings << {
@@ -144,7 +144,7 @@ class User < ApplicationRecord
         severity: "info"
       }
     end
-    
+
     warnings
   end
 
@@ -265,7 +265,7 @@ class User < ApplicationRecord
 
     def calculate_ai_error_rate(chats)
       return 0 if chats.empty?
-      
+
       error_count = chats.where("error IS NOT NULL").count
       (error_count.to_f / chats.count * 100).round(1)
     end
@@ -279,7 +279,7 @@ class User < ApplicationRecord
 
     def calculate_usage_trend(days)
       return [] if days < 7
-      
+
       (0..6).map do |i|
         date = Date.current - i.days
         count = chats.where(created_at: date.beginning_of_day..date.end_of_day).count

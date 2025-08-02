@@ -3,7 +3,7 @@
 
 # PortfolioFlow iOS App
 ios_app = Doorkeeper::Application.find_or_create_by(name: "PortfolioFlow iOS") do |app|
-app.redirect_uri = "portfolioflow://oauth/callback"
+  app.redirect_uri = "portfolioflow://oauth/callback"
   app.scopes = "read_accounts read_transactions read_balances"
   app.confidential = false # Public client (mobile app)
 end

@@ -109,7 +109,7 @@ class TradeImport < Import
     def validate_investment_data
       rows.each do |row|
         next unless row.ticker.present?
-        
+
         # Validate common investment tickers
         if row.ticker.match?(/\A[A-Z]{1,5}\z/)
           # Valid ticker format

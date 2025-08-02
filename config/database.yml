@@ -18,4 +18,4 @@ test:
 production:
   <<: *default
   database: <%= ENV.fetch("POSTGRES_DB") { "portfolioflow_production" } %>
-  url: <%= ENV.fetch("DATABASE_URL") %>
+  url: <%= ENV.fetch("DATABASE_URL", nil) %>

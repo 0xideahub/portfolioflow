@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   include Periodable
 
-  skip_authentication only: [:redis_configuration_error, :landing, :privacy, :terms]
+  skip_authentication only: [ :redis_configuration_error, :landing, :privacy, :terms ]
 
   def landing
     render layout: "blank"
